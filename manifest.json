@@ -1,0 +1,75 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+  "name": "uFinance",
+  "version": "1.1.1",
+  "manifest_version": 3,
+  "description": "Supercharge your Y!Finance to the dark side.",
+  "externally_connectable": {
+    "matches": [ "https://finance.yahoo.com/*" ]
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "64": "icons/icon64.png",
+    "128": "icons/icon128.png"
+  },
+  
+  "default_locale": "en",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://finance.yahoo.com/*"
+      ],
+      "css": [
+        "css/font-awesome-all.css",
+        "src/inject/inject.css"
+      ],
+      "js": [
+        "js/jquery/jquery.js",
+        "src/inject/inject.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources":[
+        "src/inject/inject.css",
+        "src/inject/append.vue",
+        "src/inject/append.js",
+        "src/bootstrap/css/bootstrap.css",
+        "src/bootstrap/css/bootstrap-dark.css",
+        "src/bootstrap/css/bootstrap-vue.css",
+        "src/favicons/*",
+        "src/bootstrap/js/bootstrap-vue.js",
+        "js/jquery/jquery.js",
+        "js/firebase_config.js",
+        "js/vue/vue.js",
+        "js/polyfill.js",
+        "js/stocktwits.js",
+        "js/firebase/firebase_config.js",
+        "js/firebase/firebase-app.js",
+        "js/firebase/firebase-firestore.js",
+        "js/firebase/firebase-database.js",
+        "fonts/fa-brands-400.eot",
+        "fonts/fa-brands-400.svg",
+        "fonts/fa-brands-400.ttf",
+        "fonts/fa-brands-400.woff",
+        "fonts/fa-brands-400.woff2",
+        "fonts/fa-regular-400.eot",
+        "fonts/fa-regular-400.svg",
+        "fonts/fa-regular-400.ttf",
+        "fonts/fa-regular-400.woff",
+        "fonts/fa-regular-400.woff2",
+        "fonts/fa-solid-900.eot",
+        "fonts/fa-solid-900.svg",
+        "fonts/fa-solid-900.ttf",
+        "fonts/fa-solid-900.woff",
+        "fonts/fa-solid-900.woff2"
+      ],  
+      "matches": [ "https://finance.yahoo.com/*" ]
+    }
+  ]
+}
