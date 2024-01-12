@@ -29,7 +29,7 @@ async function get_database_elements(db_name){
 
 async function add_database_url(name, url, ticker=false){
   try {
-    const docRef = await addDoc(collection(db, "propouse"), {
+    const docRef = await addDoc(collection(db, "propose"), {
       name: name,
       url: url,
       ticker: ticker,
