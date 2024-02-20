@@ -1,136 +1,322 @@
 let vue_app;
-var after_append = function (ticker, s_name) {
+const vue_app_load = function (ticker) {
     vue_app = new Vue({
-        el: "#appe",
+        el: "#ufinance_app",
         data: function () {
-            base_favicon = $("base_ext").attr("url") + "src/favicons/";
-            return this.get_data(ticker, s_name, base_favicon);
+            return this.get_data(ticker);
         },
         methods: {
-            get_data: function (ticker, s_name , base_favicon) {
+            get_data: function (ticker) {
+                const base_path = document.querySelector('base_ext').getAttribute('url');
                 return {
-                    listHidden: false,
-                    twitsHidden: false,
-                    current_ticker: s_name,
-                    base_favicon: base_favicon,
+                    hiddenCards: {},
+                    categoriesHidden: {},
+                    tickerNote: "",
+                    current_ticker: ticker,
+                    base_favicon: base_path + "src/favicons/",
+                    base_icons: base_path + "src/icons/",
                     count_alert_append_url: 0,
                     statusShowLinks: {},
+                    icons: {
+                        hide_icon: "hide-eye.svg",
+                    },
                     form_url: {
                         url: "",
                         ticker: "false",
                         name: "",
                     },
+                    form_ai: {
+                        api_key: "",
+                        model: null,
+                        model_options: [
+                            { text: 'Select a model', value: null },
+                            { text: 'To load all, enter API key', value: 'invalid' },
+                            { text: 'OpenChat 3.5 (free)', value: 'openchat/openchat-7b:free' },
+                        ],
+                        send_context: true,
+                        contextual_data: "",
+                        last_tiker_context: "",
+                        settings_status: "",
+                        load_message_status: false,
+                        api_key_check: false,
+                        modal_display: false,
+                        output_message: [],
+                        user_message: "",
+                    },
                     links: [
-                        { "id": 100, "category":"general",  "name": "Bloomberg",         "icon": "bloomberg.png",        "url": `https://www.bloomberg.com/` },
-                        { "id": 101, "category":"general",  "name": "Reuters",           "icon": "reuters.ico",          "url": `https://www.reuters.com/` },
-                        { "id": 102, "category":"general",  "name": "FT",                "icon": "ft.png",               "url": `https://www.ft.com/` },
-                        { "id": 103, "category":"general",  "name": "WSB Comment.Ai",    "icon": "commentai.png",        "url": `https://stocks.comment.ai/` },
-                        { "id": 104, "category":"search",   "name": "WSB Search",        "icon": "reddit.png",           "url": `https://www.reddit.com/r/wallstreetbets/search?q=${ticker}&restrict_sr=1` },
-                        { "id": 105, "category":"search",   "name": "WSB SwaggyStocks",  "icon": "swaggy.ico",           "url": `https://swaggystocks.com/dashboard/wallstreetbets/ticker-sentiment/${ticker}` },
-                        { "id": 106, "category":"search",   "name": "Max-Pain",          "icon": "maximum-pain.ico",     "url": `http://maximum-pain.com/options/${ticker}` },
-                        { "id": 107, "category":"search",   "name": "TradingView",       "icon": "tradingview.ico",      "url": `https://www.tradingview.com/symbols/${ticker}` },
-                        { "id": 108, "category":"search",   "name": "Twitter",           "icon": "twitter.ico",          "url": `https://twitter.com/search?q=%24${ticker}` },
-                        { "id": 109, "category":"search",   "name": "SEC",               "icon": "sec.ico",              "url": `https://www.sec.gov/cgi-bin/browse-edgar?CIK=${ticker}` },
-                        { "id": 110, "category":"search",   "name": "Google News",       "icon": "google.ico",           "url": `https://www.google.com/search?tbm=nws&q=${ticker}` },
-                        { "id": 111, "category":"search",   "name": "Google Search",     "icon": "google.ico",           "url": `https://www.google.com/search?&q=${ticker}` },
-                        { "id": 112, "category":"search",   "name": "Google Equity PDF", "icon": "google.ico",           "url": `https://www.google.com/search?&q=${ticker}+equity+research+filetype%3Apdf`},
-                        { "id": 113, "category":"search",   "name": "Finviz",            "icon": "finviz.png",           "url": `https://finviz.com/quote.ashx?t=${ticker}` },
-                        { "id": 114, "category":"general",  "name": "EW Calendar",       "icon": "earnw.ico",            "url": `https://www.earningswhispers.com/calendar` },
-                        { "id": 115, "category":"search",   "name": "EW Sentiment",      "icon": "earnw.ico",            "url": `https://www.earningswhispers.com/sentiment/${ticker}` },
-                        { "id": 116, "category":"search",   "name": "StockTwits",        "icon": "stocktwist.png",       "url": `https://stocktwits.com/symbol/${ticker}` },
-                        { "id": 117, "category":"search",   "name": "ChartMill",         "icon": "chartmill.png",        "url": `https://www.chartmill.com/stock/quote/${ticker}` },
-                        { "id": 118, "category":"search",   "name": "YCharts",           "icon": "ychart.ico",           "url": `https://ycharts.com/companies/${ticker}` },
-                        { "id": 119, "category":"search",   "name": "MacroTrends",       "icon": "macrotrends.ico",      "url": `https://www.macrotrends.net/stocks/charts/${ticker}//stock-price-history` },
-                        { "id": 120, "category":"search",   "name": "BarChart",          "icon": "barchart.ico",         "url": `https://www.barchart.com/stocks/quotes/${ticker}` },
-                        { "id": 121, "category":"search",   "name": "Advfn",             "icon": "advfn.ico",      "url": `https://advfn.com/search/index?q=${ticker}` }, 
-                        { "id": 122, "category":"search",   "name": "Barrons",           "icon": "barrons.ico",      "url": `https://www.barrons.com/market-data/stocks/${ticker}` },
-                        { "id": 123, "category":"search",   "name": "Benzinga",          "icon": "benzinga.png",      "url": `https://www.benzinga.com/quote/${ticker}` },
-                        { "id": 124, "category":"search",   "name": "Motley Fool",       "icon": "fool.webp",      "url": `https://www.fool.com/quote/${ticker}` },
-                        { "id": 125, "category":"search",   "name": "Gurufocus",         "icon": "gurufocus.ico",      "url": `https://www.gurufocus.com/stock/${ticker}` },
-                        { "id": 126, "category":"search",   "name": "Investing",         "icon": "investing.ico",      "url": `https://www.investing.com/search/?q=${ticker}` },
-                        { "id": 127, "category":"search",   "name": "InvestorPlace",     "icon": "investorplace.webp",      "url": `https://investorplace.com/stock-quotes/${ticker}-stock-quote/` },
-                        { "id": 128, "category":"search",   "name": "MarketWatch",       "icon": "marketwatch.ico",      "url": `https://www.marketwatch.com/investing/stock/${ticker}` },
-                        { "id": 129, "category":"search",   "name": "MorningStar",       "icon": "morningstar.ico",      "url": `https://www.morningstar.com/search?query=${ticker}` },
-                        { "id": 130, "category":"search",   "name": "SeekingAlpha",      "icon": "seekingalpha.svg",      "url": `https://seekingalpha.com/symbol/${ticker}` },
-                        { "id": 131, "category":"search",   "name": "StockRover",        "icon": "stockrover.ico",      "url": `https://www.stockrover.com/research/insight/summary/quotes/${ticker}` },
-                        { "id": 132, "category":"search",   "name": "TheStreet",         "icon": "thestreet.png",      "url": `https://www.thestreet.com/quote/${ticker}` },
-                        { "id": 133, "category":"search",   "name": "WSJ",               "icon": "wsj.ico",      "url": `https://www.wsj.com/market-data/quotes/${ticker}` },
-                        { "id": 134, "category":"search",   "name": "Zacks",             "icon": "zacks.ico",      "url": `https://www.zacks.com/stock/quote/${ticker}` },
-                        //{ "id": 104, "category":"search",  "name": "SEC Fail Delivery", "icon": "sec.ico", "url": `https://sec.report/fails.php?tc=${ticker}` },
+                        { "id": 100, "type": "shortcut", "name": "Bloomberg", "category": "News", "icon": "bloomberg.png", "url": `https://www.bloomberg.com/` },
+                        { "id": 101, "type": "shortcut", "name": "Reuters", "category": "News", "icon": "reuters.ico", "url": `https://www.reuters.com/` },
+                        { "id": 102, "type": "shortcut", "name": "Financial Times", "category": "News", "icon": "ft.png", "url": `https://www.ft.com/` },
+                        { "id": 114, "type": "shortcut", "name": "EW Calendar", "category": "News", "icon": "earnw.ico", "url": `https://www.earningswhispers.com/calendar` },
+                        { "id": 122, "type": "search", "name": "Barrons", "category": "News", "icon": "barrons.ico", "url": `https://www.barrons.com/market-data/stocks/${ticker}` },
+                        { "id": 123, "type": "search", "name": "Benzinga", "category": "News", "icon": "benzinga.png", "url": `https://www.benzinga.com/quote/${ticker}` },
+                        { "id": 124, "type": "search", "name": "Motley Fool", "category": "News", "icon": "fool.webp", "url": `https://www.fool.com/quote/${ticker}` },
+                        { "id": 126, "type": "search", "name": "Investing", "category": "News", "icon": "investing.ico", "url": `https://www.investing.com/search/?q=${ticker}` },
+                        { "id": 127, "type": "search", "name": "InvestorPlace", "category": "News", "icon": "investorplace.webp", "url": `https://investorplace.com/stock-quotes/${ticker}-stock-quote/` },
+                        { "id": 128, "type": "search", "name": "MarketWatch", "category": "News", "icon": "marketwatch.ico", "url": `https://www.marketwatch.com/investing/stock/${ticker}` },
+                        { "id": 129, "type": "search", "name": "MorningStar", "category": "News", "icon": "morningstar.ico", "url": `https://www.morningstar.com/search?query=${ticker}` },
+                        { "id": 132, "type": "search", "name": "TheStreet", "category": "News", "icon": "thestreet.png", "url": `https://www.thestreet.com/quote/${ticker}` },
+                        { "id": 133, "type": "search", "name": "WSJ", "category": "News", "icon": "wsj.ico", "url": `https://www.wsj.com/market-data/quotes/${ticker}` },
+                        { "id": 109, "type": "search", "name": "SEC", "category": "Regulatory", "icon": "sec.ico", "url": `https://www.sec.gov/cgi-bin/browse-edgar?CIK=${ticker}` },
+                        { "id": 135, "type": "search", "name": "Reddit", "category": "Social Media", "icon": "reddit.png", "url": `https://www.reddit.com/search/?q=${ticker}` },
+                        { "id": 104, "type": "search", "name": "WSB Search", "category": "Social Media", "icon": "reddit.png", "url": `https://www.reddit.com/r/wallstreetbets/search?q=${ticker}&restrict_sr=1` },
+                        { "id": 108, "type": "search", "name": "X", "category": "Social Media", "icon": "x.svg", "url": `https://x.com/search?q=%24${ticker}` },
+                        { "id": 116, "type": "search", "name": "StockTwits", "category": "Social Media", "icon": "stocktwist.png", "url": `https://stocktwits.com/symbol/${ticker}` },
+                        { "id": 110, "type": "search", "name": "Google News", "category": "Search Engines", "icon": "google.ico", "url": `https://www.google.com/search?tbm=nws&q=${ticker}` },
+                        { "id": 111, "type": "search", "name": "Google Search", "category": "Search Engines", "icon": "google.ico", "url": `https://www.google.com/search?&q=${ticker}` },
+                        { "id": 112, "type": "search", "name": "Google Equity PDF", "category": "Search Engines", "icon": "google.ico", "url": `https://www.google.com/search?&q=${ticker}+equity+research+filetype%3Apdf` },
+                        { "id": 103, "type": "shortcut", "name": "WSB Comment.Ai", "category": "Analysis Tools", "icon": "commentai.png", "url": `https://stocks.comment.ai/` },
+                        { "id": 105, "type": "search", "name": "WSB SwaggyStocks", "category": "Analysis Tools", "icon": "swaggy.ico", "url": `https://swaggystocks.com/dashboard/wallstreetbets/ticker-sentiment/${ticker}` },
+                        { "id": 106, "type": "search", "name": "Max-Pain", "category": "Analysis Tools", "icon": "maximum-pain.ico", "url": `http://maximum-pain.com/options/${ticker}` },
+                        { "id": 107, "type": "search", "name": "TradingView", "category": "Analysis Tools", "icon": "tradingview.ico", "url": `https://www.tradingview.com/symbols/${ticker}` },
+                        { "id": 113, "type": "search", "name": "Finviz", "category": "Analysis Tools", "icon": "finviz.png", "url": `https://finviz.com/quote.ashx?t=${ticker}` },
+                        { "id": 115, "type": "search", "name": "EW Stats", "category": "Analysis Tools", "icon": "earnw.ico", "url": `https://www.earningswhispers.com/stocks/${ticker}` },
+                        { "id": 117, "type": "search", "name": "ChartMill", "category": "Analysis Tools", "icon": "chartmill.png", "url": `https://www.chartmill.com/stock/quote/${ticker}` },
+                        { "id": 118, "type": "search", "name": "YCharts", "category": "Analysis Tools", "icon": "ychart.ico", "url": `https://ycharts.com/companies/${ticker}` },
+                        { "id": 119, "type": "search", "name": "MacroTrends", "category": "Analysis Tools", "icon": "macrotrends.ico", "url": `https://www.macrotrends.net/stocks/charts/${ticker}//stock-price-history` },
+                        { "id": 120, "type": "search", "name": "BarChart", "category": "Analysis Tools", "icon": "barchart.ico", "url": `https://www.barchart.com/stocks/quotes/${ticker}` },
+                        { "id": 121, "type": "search", "name": "Advfn", "category": "Analysis Tools", "icon": "advfn.ico", "url": `https://advfn.com/search/index?q=${ticker}` },
+                        { "id": 125, "type": "search", "name": "GuruFocus", "category": "Analysis Tools", "icon": "gurufocus.ico", "url": `https://www.gurufocus.com/stock/${ticker}` },
+                        { "id": 130, "type": "search", "name": "SeekingAlpha", "category": "Analysis Tools", "icon": "seekingalpha.svg", "url": `https://seekingalpha.com/symbol/${ticker}` },
+                        { "id": 131, "type": "search", "name": "Stock Rover", "category": "Analysis Tools", "icon": "stockrover.ico", "url": `https://www.stockrover.com/research/insight/summary/quotes/${ticker}` },
+                        { "id": 134, "type": "search", "name": "Zacks", "category": "Analysis Tools", "icon": "zacks.ico", "url": `https://www.zacks.com/stock/quote/${ticker}` },
+                        { "id": 139, "type": "search", "name": "Decode Investing", "category": "Analysis Tools", "icon": "decode_inv.png", "url": `https://decodeinvesting.com/ticker/${ticker}` },
+                        { "id": 141, "type": "search", "name": "Tradestie", "category": "Analysis Tools", "icon": "tradestie.png", "url": `https://tradestie.com/apps/stockmarket/${ticker}-analysis/` },
+                        { "id": 136, "type": "search", "name": "Copilot", "category": "A.I. LLMs", "icon": "copilot.ico", "url": `https://www.bing.com/search?showconv=1&sendquery=1&seltone=c&q=tell me about the stock with ticker: ${ticker}` },
+                        { "id": 137, "type": "shortcut", "name": "ChatGPT", "category": "A.I. LLMs", "icon": "chatgpt.png", "url": `https://chat.openai.com/` },
+                        { "id": 138, "type": "shortcut", "name": "Gemini", "category": "A.I. LLMs", "icon": "gemini.svg", "url": `https://bard.google.com/chat` },
+                        { "id": 140, "type": "shortcut", "name": "Claude", "category": "A.I. LLMs", "icon": "claude.ico", "url": `https://claude.ai/` },
                     ]
                 }
             },
-            updateUrlList: function (ticker) {
-                new_data = this.get_data(ticker);
-                this.current_ticker = ticker;
-                this.links = new_data.links;
+            toggleCategoryHidden(category) {
+                let ls_cat = category.toLowerCase().replace(/\s/g, '_');
+                this.$set(this.categoriesHidden, ls_cat, !this.categoriesHidden[ls_cat]);
+                localStorage.hiddenCategories = JSON.stringify(this.categoriesHidden);
             },
-            appendUrlToList(name, link, attach_ticker=false){
+            isCategoryHidden(category) {
+                let ls_cat = category.toLowerCase().replace(/\s/g, '_');
+                return !this.categoriesHidden[ls_cat];
+            },
+            toggleCardHidden(cardName) {
+                this.$set(this.hiddenCards, cardName, !this.hiddenCards[cardName]);
+                localStorage.hiddenCards = JSON.stringify(this.hiddenCards);
+            },
+            getHiddenCategoriesFromLS() {
+                return JSON.parse(localStorage.getItem('hiddenCategories')) || {};
+            },
+            getHiddenCardsFromLS() {
+                return JSON.parse(localStorage.getItem('hiddenCards')) || {};
+            },
+            getTickerNoteFromLS(ticker) {
+                return JSON.parse(localStorage.tickerNotes)[ticker] || "";
+            },
+            getOrApiKeyFromLS() {
+                return localStorage.getItem('orApiKey');
+            },
+            getOrModelsOptionsFromLS() {
+                return JSON.parse(localStorage.getItem('orModelsOptions')) || {};
+            },
+            getOrModelSelectFromLS() {
+                return localStorage.getItem('orModel');
+
+            },
+            getOrSendContextFromLS() {
+                return localStorage.getItem('orSendContext');
+            },
+            getOrModelName(modelValue) {
+                const selectedOption = this.form_ai.model_options.find(option => option.value === modelValue);
+                return selectedOption ? selectedOption.text : null;
+            },
+            updateAppData(ticker) {
+                updatedData = this.get_data(ticker);
+                this.$set(this, 'current_ticker', ticker);
+                this.$set(this, 'tickerNote', this.getTickerNoteFromLS(ticker));
+                this.$set(this, 'links', updatedData.links);
+            },
+            appendUrlToList(name, link, attach_ticker = false) {
                 add_database_url(name, link, attach_ticker);
                 this.appendWebsite(name, link, attach_ticker);
                 //Show alert about appended URL and time to show alert
                 this.count_alert_append_url = 5;
             },
+            saveOrSettings(orApiKey, model, context) {
+                if (model === "") {
+                    model = "openchat/openchat-7b:free";
+                }
+                localStorage.setItem('orApiKey', orApiKey);
+                localStorage.setItem('orModel', model);
+                localStorage.setItem('orSendContext', context);
+            },
+            saveAiOutputToNotes() {
+                if (this.tickerNote.length > 0) {
+                    this.tickerNote += "\n";
+                }
+                let conversationString = this.form_ai.output_message.map(
+                    item => `${capitalize_first_letter(item.message.role.trim())}:\n${item.message.content.trim()}\n`).join('\n');
+                this.tickerNote += conversationString;
+            },
+            sendOrAssistantMessage() {
+                this.form_ai.output_message.push(
+                    {
+                        message: {
+                            role: 'user',
+                            content: this.form_ai.user_message.trim(),
+                        }
+                    });
+                this.form_ai.user_message = "";
+                this.form_ai.load_message_status = true;
+                const continued_conversation = this.form_ai.output_message.map(item => item.message);
+                document.dispatchEvent(new CustomEvent('orSendDataEvent',
+                    {
+                        detail:
+                        {
+                            getMessageFromAi: true,
+                            messages: continued_conversation,
+                            ticker: current_ticker,
+                            model: this.form_ai.model,
+                            context: this.form_ai.contextual_data,
+                        }
+                    })
+                );
+            },
             countDownChangedAppendUrl(count_alert_append_url) {
                 this.count_alert_append_url = count_alert_append_url;
             },
-            getAddedWebsitesFromLS(){
-                return JSON.parse(localStorage.getItem('added_links')) || [];
+            getAddedWebsitesFromLS() {
+                return JSON.parse(localStorage.getItem('addedLinks')) || [];
             },
-            appendWebsite(name, url, use_ticker){
+            appendWebsite(name, url, use_ticker) {
                 let ls_links = this.getAddedWebsitesFromLS();
-                max_id = (ls_links.length == 0)?200:Math.max(...ls_links.map(ls_links => ls_links.id));
-                url.charAt(url.length - 1) !== "/"?url = url.concat("/"):null;
-                category = use_ticker?"search":"general";
-                let new_link_object = {"id": max_id + 1, "category": category, "name":name, "icon": "default.png", "url": `${url}`};
-                new_link_object.url = use_ticker?`${url}${ticker}`:`${url}`;
+                max_id = (ls_links.length == 0) ? 200 : Math.max(...ls_links.map(ls_links => ls_links.id));
+                url.charAt(url.length - 1) !== "/" ? url = url.concat("/") : null;
+                type = use_ticker ? "search" : "shortcut";
+                category = "User added"
+                let new_link_object = { "id": max_id + 1, "type": type, "name": name, "category": category, "icon": "default.png", "url": `${url}` };
+                new_link_object.url = use_ticker ? `${url}${ticker}` : `${url}`;
                 ls_links.push(new_link_object);
                 this.links.push(new_link_object);
-                //console.log(ls_links);
-                localStorage.added_links = JSON.stringify(ls_links);
+                localStorage.addedLinks = JSON.stringify(ls_links);
             },
-            getHiddenWebsitesFromLS(){
-                return JSON.parse(localStorage.getItem('hidden_links')) || [];
+            getHiddenWebsitesFromLS() {
+                return JSON.parse(localStorage.getItem('hiddenLinks')) || [];
             },
-            hideWebsite(id){
+            hideWebsite(id) {
                 let ls_hidden = this.getHiddenWebsitesFromLS();
                 ls_hidden.push(id);
                 links = this.links;
                 this.$set(this.statusShowLinks, id, true);
-                localStorage.hidden_links = JSON.stringify(ls_hidden);
+                localStorage.hiddenLinks = JSON.stringify(ls_hidden);
             },
-            resetHiddenWebsites(){
-                localStorage.hidden_links = JSON.stringify([]);
+            resetHiddenWebsites() {
+                localStorage.hiddenLinks = JSON.stringify([]);
                 this.statusShowLinks = {};
             },
             onSubmitURL(event) {
-                var $urlForm = $('#input-url'); 
+                const $urlForm = $('#input-url');
                 $urlForm[0].reportValidity();
                 event.preventDefault();
-                if($urlForm[0].checkValidity()){
-                    if(this.form_url.ticker == "true"){
+                if ($urlForm[0].checkValidity()) {
+                    if (this.form_url.ticker == "true") {
                         this.form_url.ticker = true;
-                    } else{
+                    } else {
                         this.form_url.ticker = false;
                     }
                     this.appendUrlToList(this.form_url.name, this.form_url.url, this.form_url.ticker);
                 }
             },
+            onSubmitAISettings(event) {
+                event.preventDefault();
+                if (this.form_ai.api_key === "") {
+                    this.form_ai.settings_status = "error_api_check";
+                    return;
+                }
+                if (this.form_ai.model === null) {
+                    this.form_ai.settings_status = "error_null_model";
+                    return;
+                }
+                if (this.form_ai.api_key_check) {
+                    this.form_ai.settings_status = "success";
+                    this.saveOrSettings(this.form_ai.api_key, this.form_ai.model, this.form_ai.send_context);
+                }
+            },
+            log(msg) {
+                window.console.log(msg);
+            }
         },
-        mounted(){
-            if (localStorage.listHidden) {
-                this.listHidden = localStorage.listHidden=='true' ? true:false;
-            }
-            if (localStorage.twitsHidden) {
-                this.twitsHidden = localStorage.twitsHidden=='true' ? true:false;
-            }
+        computed: {
+            console: () => console,
+            linksByType() {
+                is_comodity_index = check_commodity(current_ticker);
+                if (is_comodity_index) {
+                    return this.links.filter((link) => link.type === "shortcut");
+                }
+                return this.links;
+            },
+            categories() {
+                // Get unique categories and sort them
+                const uniqueCategories = [...new Set(this.linksByType.map((link) => link.category))];
+                const sortedCategories = uniqueCategories.sort((a, b) => {
+                    if (a === "User added") {
+                        return -1;
+                    } else {
+                        return a.localeCompare(b);
+                    }
+                });
+                return sortedCategories;
+            },
+            groupedLinks() {
+                // Group links by category
+                const grouped = {};
+                this.categories.forEach((category) => {
+                    if (category === 'undefined') {
+                        category = 'User';
+                    }
+                    grouped[category] = this.linksByType.filter((link) => link.category === category);
+                });
+                return grouped;
+            },
+        },
+        mounted() {
             this.links = this.links.concat(this.getAddedWebsitesFromLS());
-            if(localStorage.hidden_links){
+            if (localStorage.hiddenLinks) {
                 links = this.links;
                 this.getHiddenWebsitesFromLS().map(l => {
-                    //console.log(l);
                     this.$set(this.statusShowLinks, l, true);
                 });
+            }
+            if (localStorage.hiddenCards) {
+                this.hiddenCards = this.getHiddenCardsFromLS();
+            }
+            if (localStorage.hiddenCategories) {
+                this.categoriesHidden = this.getHiddenCategoriesFromLS();
+            }
+            if (localStorage.tickerNotes) {
+                this.tickerNote = this.getTickerNoteFromLS(this.current_ticker);
+            }
+            if (localStorage.orApiKey) {
+                this.form_ai.api_key = this.getOrApiKeyFromLS();
+                this.form_ai.api_key_check = true;
+            }
+            if (localStorage.orModelsOptions) {
+                this.form_ai.model_options = this.getOrModelsOptionsFromLS();
+            }
+            if (localStorage.orModel) {
+                this.form_ai.model = this.getOrModelSelectFromLS();
+            }
+            if (localStorage.orSendContext) {
+                this.form_ai.send_context = this.getOrSendContextFromLS();
+            }
+            if (current_ticker) {
+                if (this.form_ai.send_context) {
+                    if (this.form_ai.last_tiker_context !== current_ticker) {
+                        let tiker_context = get_contextual_data();
+                        if (tiker_context.length > 0) {
+                            this.form_ai.contextual_data = tiker_context;
+                            this.form_ai.last_tiker_context = current_ticker;
+                        }
+                    }
+                }
             }
         },
         watch: {
@@ -140,16 +326,51 @@ var after_append = function (ticker, s_name) {
             twitsHidden(twitsHidden) {
                 localStorage.twitsHidden = twitsHidden;
             },
+            tickerNote(tickerNote) {
+                const tickerNotes = JSON.parse(localStorage.getItem('tickerNotes')) || {};
+                tickerNotes[this.current_ticker] = tickerNote;
+                localStorage.setItem('tickerNotes', JSON.stringify(tickerNotes));
+            },
+            'form_ai.api_key': function (newVal, oldVar) {
+                if (newVal.length > 6) {
+                    if (newVal !== this.getOrApiKeyFromLS()) {
+                        this.form_ai.settings_status = 'checking';
+                        document.dispatchEvent(new CustomEvent('orSendDataEvent', { detail: { apiKeyCheck: true, apiKey: newVal } }));
+                    }
+                } else {
+                    this.form_ai.settings_status = 'error_api_check';
+                }
+            },
+            'form_ai.modal_display': function (newVal, oldVar) {
+                if (newVal && this.form_ai.output_message.length == 0) {
+                    this.form_ai.load_message_status = true;
+                    document.dispatchEvent(new CustomEvent('orSendDataEvent',
+                        {
+                            detail:
+                            {
+                                getMessageFromAi: true,
+                                ticker: current_ticker,
+                                model: this.form_ai.model,
+                                context: this.form_ai.contextual_data,
+                            }
+                        }
+                    ));
+                }
+            }
         }
     })
 }
 
-var insert_stocktwits = function (ticker) {
+const capitalize_first_letter = function (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const insert_stocktwits = function (ticker) {
     $('#stocktwits-widget-news').empty();
-    var pluginConfig = {
+    const pluginConfig = {
         container: 'stocktwits-widget-news',
         symbol: ticker,
-        width: '297',
+        width: $('#ufinance_app').width(),
         height: '600',
         limit: '70',
         scrollbars: 'true',
@@ -174,22 +395,10 @@ var insert_stocktwits = function (ticker) {
     STWT.Widget(pluginConfig);
 }
 
-var fetch_web = function (ext_id, url, append_to, append_from) {
-    chrome.runtime.sendMessage(ext_id,
-        {
-            url: url,
-        },
-        function (response) {
-            content = $(append_from, response)
-            $(append_to).append(content);
-        }
-    );
-}
-
-
-var get_ticker = function () {
-    var regexTicker = /(?<=quote\/)(.*[A-Z])(?=\?)/g; ///(?<=quote\/)(.*[A-Z])((?=\/)|(?=\?))/g;
-    var detectedTickers = regexTicker.exec(window.location.href);
+const get_ticker = function () {
+    const regexTicker = /(?<=\/quote\/)(.[\^\=A-Z]+)/g;
+    decodedPath = decodeURIComponent(window.location.pathname);
+    const detectedTickers = regexTicker.exec(decodedPath);
     if (detectedTickers) {
         current_ticker = detectedTickers[0];
         return current_ticker;
@@ -199,100 +408,159 @@ var get_ticker = function () {
     }
 }
 
-//TODO: Update after pushstate, popstate, because it takes the old name
-var get_stock_name = function () {
-    var stock_title = $("#quote-header-info .D\\(ib\\).Fz\\(18px\\)").text();//document.querySelector('title').text;
-    return stock_title;
-    /*
-    var regexStName = /(?<=\: )(.*)(?=\ -)/g; ///(?<=quote\/)(.*[A-Z])((?=\/)|(?=\?))/g;
-    regexStName.lastIndex = 0;
-    var detectedName = regexStName.exec(stock_title);
-    return stock_title;
-    if (detectedName) {
-        current_name = detectedName[0];
-        if(regexFilterComodities.exec(current_name).length <= 0){
-            return current_name;
+const get_contextual_data = function () {
+    let context_data = "";
+    try {
+        if (document.getElementById("svelte")) {
+            const svelt_news_headlines = document.querySelector('*[data-testid="recent-news"]').textContent.trim();
+            const svelt_quote_stats = document.querySelector('*[data-testid="quote-statistics"]').textContent.trim();
+            const svelt_current_price = "Current price:" + document.querySelector('*[data-testid="qsp-price"]').textContent.trim();
+            const svelt_valuation_measure = document.querySelector('*[data-testid="valuation-measures"]').textContent.trim();
+            const svelt_financial_highlights = document.querySelector('*[data-testid="financial-highlights"]').textContent.trim();
+            context_data = svelt_news_headlines + "\n" + svelt_quote_stats + "\n" + svelt_current_price + "\n" + svelt_valuation_measure + "\n" + svelt_financial_highlights;
+        } 
+        else if (document.getElementById("YDC-Lead")) {
+            const clasic_quote_summary = document.querySelector('#quote-summary').textContent.trim();
+            const clasic_news_data = document.querySelector('#mrt-node-quoteNewsStream-0-Stream').textContent.trim();
+            const classic_current_price = "Current price:" + document.querySelector('#quote-header-info *[data-field="regularMarketPrice"]').textContent.trim();
+            context_data = clasic_quote_summary + "\n" + clasic_news_data + "\n" + classic_current_price + "\n";
         }
-        else{
-            return null;
-        }
+    } catch (error) {
+        console.error("Error getting contextual data:", error.message);
     }
-    else {
-        return null;
-    }*/
+
+    return context_data;
 }
 
-var check_commodity = function(current_ticker){
-    var regexFilterComodities = /-|\%5E|\%3D|\./g;
-    var r_chk_res = regexFilterComodities.exec(current_ticker)
+const check_commodity = function (current_ticker) {
+    const regexFilterComodities = /-|\^|\=|\./g;
+    const r_chk_res = regexFilterComodities.exec(current_ticker);
     is_comodity_index = false;
 
-    if(r_chk_res && r_chk_res.length > 0){
+    if (r_chk_res && r_chk_res.length > 0) {
         is_comodity_index = true;
     }
 
     return is_comodity_index;
 }
 
-var hide_all_app = function () {
+const hide_all_app = function () {
+    $("#stock_notes").hide();
     $("#stocktwits-widget-news").hide();
-    $("#appe").hide();
+    $("#ufinance_app").hide();
 }
 
-var show_all_app = function () {
+const show_all_app = function () {
+    $("#stock_notes").show();
     $("#stocktwits-widget-news").show();
-    $("#appe").show();
+    $("#ufinance_app").show();
 }
 
-var update_functions = function () {
-    //console.log("UFINANCE: update function");
+const update_functions = function () {
     current_ticker = get_ticker();
-    current_stock_name = get_stock_name();
-    is_comodity_index = check_commodity(current_ticker);
 
-    if (current_ticker && !is_comodity_index) {
-        //after_append(current_ticker);
-        insert_stocktwits(current_ticker);
-        //TODO: vue_app.updateUrlList(current_ticker, current_stock_name);
-        vue_app.updateUrlList(current_ticker);
-
+    if (current_ticker) {
+        if (!check_commodity(current_ticker)) {
+            insert_stocktwits(current_ticker);
+            $("#st_car").show();
+        } else {
+            $("#st_car").hide();
+        }
+        vue_app.updateAppData(current_ticker);
         show_all_app();
-    } else { //hide if isn't to a page where regex match
+    } else {
         hide_all_app();
     }
 }
 
-var append_functions = function () {
-    //console.log("UFINANCE: append function");
+const append_functions = function () {
     current_ticker = get_ticker();
-    current_stock_name = get_stock_name();
-    is_comodity_index = check_commodity(current_ticker);
-    
-    if (current_ticker && !is_comodity_index) {
-        base_url = $("base_ext").attr("url")
-        ext_id = $("base_ext").attr("ext_id")
+
+    if (current_ticker) {
+        base_url = $("base_ext").attr("url");
+        ext_id = $("base_ext").attr("ext_id");
         $.get(base_url + 'src/inject/append.vue', function (data) {
-            $("#YDC-Col2").prepend(data);
-            after_append(current_ticker, current_stock_name);
-            insert_stocktwits(current_ticker);
+            if ($("#render-target-default").length) {
+                $("#render-target-default").append(data);
+            }
+            else if ($("body#atomic").length) {
+                $("body#atomic").append(data);
+                const top_ad_height = $("#svelte .ad .tw-sticky.tw-top-0").height();
+                const under_header_offset = top_ad_height + 130;
+                $("#ufinance_app").css('top', under_header_offset);
+                $("#st_car").hide();
+            }
+            vue_app_load(current_ticker);
+            if ($("#render-target-default").length) {
+                if (!check_commodity(current_ticker)) {
+                    insert_stocktwits(current_ticker);
+                    $("#st_car").show();
+                } else {
+                    $("#st_car").hide();
+                }
+            }
         });
     }
 }
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     history.pushState = (f => function pushState() {
-        var ret = f.apply(this, arguments);
+        const ret = f.apply(this, arguments);
         window.dispatchEvent(new Event('pushstate'));
         return ret;
     })(history.pushState)
 
     $(window).on('pushstate popstate', function () {
-        if ($("#appe").length) {
+        if ($("#ufinance_app").length) {
             update_functions();
         } else {
             append_functions();
         }
     });
-
     append_functions();
+});
+
+$(document).on("click", "#show-hide-ufinance", function () {
+    if ($("#ufinance_app").hasClass("slide-right-animate")) {
+        $("#ufinance_app").animate({ width: "250" }, 200, function () {
+            $("#ufinance_app").removeClass("slide-right-animate");
+            $("#ufinance_app").css("width", "");
+            localStorage.setItem("ufinanceAppHidden", "false");
+        });
+    } else {
+        $("#ufinance_app").addClass("slide-right-animate");
+        $("#ufinance_app").animate({ width: "0" }, 200);
+        localStorage.setItem("ufinanceAppHidden", "true");
+    }
+});
+
+$(document).ready(function () {
+    if (localStorage.getItem("ufinanceAppHidden") == "true") {
+        $("#ufinance_app").addClass("slide-right-animate");
+        $("#ufinance_app").css("width", "0");
+    }
+});
+
+document.addEventListener('orReceiveDataEvent', function (e) {
+    var data = e.detail;
+    if (data.invalidApiKey === true) {
+        vue_app.form_ai.settings_status = 'error_api_check';
+        vue_app.form_ai.api_key_check = false;
+    }
+    if (data.is_free_tier === true) {
+        vue_app.form_ai.settings_status = 'success_api_check';
+        vue_app.form_ai.api_key_check = true;
+        //document.dispatchEvent(new CustomEvent('orSendDataEvent', { detail: { getOrModels: true } }));
+    }
+    if (data.orModels) {
+        vue_app.form_ai.model_options = data.orModels.map(model => ({
+            text: model.name,
+            value: model.id,
+        }));
+        localStorage.orModelsOptions = JSON.stringify(vue_app.form_ai.model_options);
+    }
+    if (data.orMessages) {
+        vue_app.form_ai.output_message.push(...data.orMessages);
+        vue_app.form_ai.load_message_status = false;
+    }
 });

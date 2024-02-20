@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "./firebase-app.js";
-import { getFirestore, collection, query, where, getDocs, addDoc } from "./firebase-firestore.js";
+import { getApp, getApps, initializeApp } from "./firebase-app.js";
+import { getFirestore, collection, query, where, getDocs, addDoc } from "./firebase-firestore-lite.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
@@ -12,12 +12,10 @@ const firebaseConfig = {
   messagingSenderId: "864703235336",
   appId: "1:864703235336:web:f7bf9cbc77c2f3336ed8bd"
 };
-// Initialize Firebase
-const firebase_app = initializeApp(firebaseConfig);
 
-console.log(firebase_app)
+// Initialize Firebase
+const firebase_app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getFirestore(firebase_app);
-console.log(db);
 
 async function get_database_elements(db_name){
   const q = query(collection(db, db_name));
@@ -45,4 +43,3 @@ globalThis.firebase_app = firebase_app;
 globalThis.db = db;
 globalThis.get_database_elements = get_database_elements;
 globalThis.add_database_url = add_database_url;
-//console.log(Firestore)
