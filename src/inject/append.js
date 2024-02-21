@@ -122,7 +122,7 @@ const vue_app_load = function (ticker) {
 
             },
             getOrSendContextFromLS() {
-                return localStorage.getItem('orSendContext');
+                return JSON.parse(localStorage.getItem('orSendContext'));
             },
             updateAiContext() {
                 if (this.current_ticker) {
@@ -145,7 +145,7 @@ const vue_app_load = function (ticker) {
                 this.$set(this, 'current_ticker', ticker);
                 this.$set(this, 'tickerNote', this.getTickerNoteFromLS(ticker));
                 this.$set(this, 'links', updatedData.links);
-                if(this.current_ticker != this.last_ticker){
+                if (this.current_ticker != this.last_ticker) {
                     this.$set(this.form_ai, 'output_message', []);
                 }
             },
@@ -422,7 +422,7 @@ const get_contextual_data = function () {
             const svelt_valuation_measure = document.querySelector('*[data-testid="valuation-measures"]').textContent.trim();
             const svelt_financial_highlights = document.querySelector('*[data-testid="financial-highlights"]').textContent.trim();
             context_data = svelt_news_headlines + "\n" + svelt_quote_stats + "\n" + svelt_current_price + "\n" + svelt_valuation_measure + "\n" + svelt_financial_highlights;
-        } 
+        }
         else if (document.getElementById("YDC-Lead")) {
             const clasic_quote_summary = document.querySelector('#quote-summary').textContent.trim();
             const clasic_news_data = document.querySelector('#quoteNewsStream-0-Stream').textContent.trim();
