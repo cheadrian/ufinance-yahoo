@@ -1206,7 +1206,7 @@ svg.svelte-7mltoh {
 .ufinance .hideButton {
     position: absolute;
     right: 0px;
-    margin: 12px 10px 0 0;
+    margin: 12px 10px 0 0 !important;
     z-index: 999999999;
     opacity: 0;
     font-size: 0.7rem !important;
@@ -1323,4 +1323,24 @@ body#atomic #ufinance_app {
 
 .ufinance .btn {
     margin: 0.2rem 0.5rem;
+}
+
+.review-us-btn{
+    background: linear-gradient(90deg, rgba(129,127,20,1) 0%, rgba(235,219,18,1) 35%, rgba(247,255,0,1) 100%) !important;
+    color: white!important;
+    padding: 1rem !important;
+    border: 2px solid #ff0000!important;
+    text-shadow: 0px 1px 2px #000, 1px 2px 2px #000000!important;
+}
+
+.review-us-btn:hover{
+    color: #ffcfcf!important;
+}
+
+.close_header_icon {
+    border: 2px solid #3165ca;
+    background: #2e26a9;
+    border-radius: 4px;
+    padding: 6px 8px;
+    cursor: pointer;
 }

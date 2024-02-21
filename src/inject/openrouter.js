@@ -17,7 +17,8 @@ const openrouter_check_api_key = async function (apiKey) {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            console.log(`HTTP error while checking API key! Status: ${response.status}`);
+            return ;
         }
 
         return await response.json();
@@ -106,7 +107,6 @@ document.addEventListener('orSendDataEvent', async function (e) {
             dispatch_models_to_website(data.apiKey);
         } else {
             document.dispatchEvent(new CustomEvent('orReceiveDataEvent', { detail: { invalidApiKey: true } }));
-            throw new Error('OpenRouter API key is invalid');
         }   
     }
     if(data.getMessageFromAi === true){
@@ -114,7 +114,7 @@ document.addEventListener('orSendDataEvent', async function (e) {
         if(response) {
             document.dispatchEvent(new CustomEvent('orReceiveDataEvent', { detail: { orMessages: response.choices } }));
         } else {
-            throw new Error('OpenRouter API key is invalid');
+            throw new Error('OpenRouter API generic conversation error.');
         }
     }
     //if(data.getOrModels === true){ }

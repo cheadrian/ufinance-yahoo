@@ -9,10 +9,11 @@ const vue_app_load = function (ticker) {
             get_data: function (ticker) {
                 const base_path = document.querySelector('base_ext').getAttribute('url');
                 return {
+                    current_ticker: ticker,
+                    last_ticker: "",
                     hiddenCards: {},
                     categoriesHidden: {},
                     tickerNote: "",
-                    current_ticker: ticker,
                     base_favicon: base_path + "src/favicons/",
                     base_icons: base_path + "src/icons/",
                     count_alert_append_url: 0,
@@ -35,7 +36,6 @@ const vue_app_load = function (ticker) {
                         ],
                         send_context: true,
                         contextual_data: "",
-                        last_tiker_context: "",
                         settings_status: "",
                         load_message_status: false,
                         api_key_check: false,
@@ -124,6 +124,18 @@ const vue_app_load = function (ticker) {
             getOrSendContextFromLS() {
                 return localStorage.getItem('orSendContext');
             },
+            updateAiContext() {
+                if (this.current_ticker) {
+                    if (this.form_ai.send_context) {
+                        if (this.last_ticker !== this.current_ticker) {
+                            this.form_ai.contextual_data = get_contextual_data();
+                            this.last_ticker = this.current_ticker;
+                        }
+                    } else {
+                        this.form_ai.contextual_data = "";
+                    }
+                }
+            },
             getOrModelName(modelValue) {
                 const selectedOption = this.form_ai.model_options.find(option => option.value === modelValue);
                 return selectedOption ? selectedOption.text : null;
@@ -133,6 +145,9 @@ const vue_app_load = function (ticker) {
                 this.$set(this, 'current_ticker', ticker);
                 this.$set(this, 'tickerNote', this.getTickerNoteFromLS(ticker));
                 this.$set(this, 'links', updatedData.links);
+                if(this.current_ticker != this.last_ticker){
+                    this.$set(this.form_ai, 'output_message', []);
+                }
             },
             appendUrlToList(name, link, attach_ticker = false) {
                 add_database_url(name, link, attach_ticker);
@@ -173,7 +188,7 @@ const vue_app_load = function (ticker) {
                         {
                             getMessageFromAi: true,
                             messages: continued_conversation,
-                            ticker: current_ticker,
+                            ticker: this.current_ticker,
                             model: this.form_ai.model,
                             context: this.form_ai.contextual_data,
                         }
@@ -247,7 +262,7 @@ const vue_app_load = function (ticker) {
         computed: {
             console: () => console,
             linksByType() {
-                is_comodity_index = check_commodity(current_ticker);
+                is_comodity_index = check_commodity(this.current_ticker);
                 if (is_comodity_index) {
                     return this.links.filter((link) => link.type === "shortcut");
                 }
@@ -307,17 +322,6 @@ const vue_app_load = function (ticker) {
             if (localStorage.orSendContext) {
                 this.form_ai.send_context = this.getOrSendContextFromLS();
             }
-            if (current_ticker) {
-                if (this.form_ai.send_context) {
-                    if (this.form_ai.last_tiker_context !== current_ticker) {
-                        let tiker_context = get_contextual_data();
-                        if (tiker_context.length > 0) {
-                            this.form_ai.contextual_data = tiker_context;
-                            this.form_ai.last_tiker_context = current_ticker;
-                        }
-                    }
-                }
-            }
         },
         watch: {
             listHidden(listHidden) {
@@ -344,12 +348,13 @@ const vue_app_load = function (ticker) {
             'form_ai.modal_display': function (newVal, oldVar) {
                 if (newVal && this.form_ai.output_message.length == 0) {
                     this.form_ai.load_message_status = true;
+                    this.updateAiContext();
                     document.dispatchEvent(new CustomEvent('orSendDataEvent',
                         {
                             detail:
                             {
                                 getMessageFromAi: true,
-                                ticker: current_ticker,
+                                ticker: this.current_ticker,
                                 model: this.form_ai.model,
                                 context: this.form_ai.contextual_data,
                             }
@@ -376,7 +381,7 @@ const insert_stocktwits = function (ticker) {
         scrollbars: 'true',
         streaming: 'true',
         avatars: 0,
-        title: current_ticker + ' Ideas',
+        title: ticker + ' Ideas',
         style: {
             link_color: '#4f8ce8',
             link_hover_color: '#4f8ce8',
@@ -400,8 +405,7 @@ const get_ticker = function () {
     decodedPath = decodeURIComponent(window.location.pathname);
     const detectedTickers = regexTicker.exec(decodedPath);
     if (detectedTickers) {
-        current_ticker = detectedTickers[0];
-        return current_ticker;
+        return detectedTickers[0];
     }
     else {
         return null;
@@ -421,12 +425,12 @@ const get_contextual_data = function () {
         } 
         else if (document.getElementById("YDC-Lead")) {
             const clasic_quote_summary = document.querySelector('#quote-summary').textContent.trim();
-            const clasic_news_data = document.querySelector('#mrt-node-quoteNewsStream-0-Stream').textContent.trim();
+            const clasic_news_data = document.querySelector('#quoteNewsStream-0-Stream').textContent.trim();
             const classic_current_price = "Current price:" + document.querySelector('#quote-header-info *[data-field="regularMarketPrice"]').textContent.trim();
             context_data = clasic_quote_summary + "\n" + clasic_news_data + "\n" + classic_current_price + "\n";
         }
     } catch (error) {
-        console.error("Error getting contextual data:", error.message);
+        console.log("Failed to detect contextual data:", error.message);
     }
 
     return context_data;
@@ -457,7 +461,7 @@ const show_all_app = function () {
 }
 
 const update_functions = function () {
-    current_ticker = get_ticker();
+    const current_ticker = get_ticker();
 
     if (current_ticker) {
         if (!check_commodity(current_ticker)) {
@@ -474,7 +478,7 @@ const update_functions = function () {
 }
 
 const append_functions = function () {
-    current_ticker = get_ticker();
+    const current_ticker = get_ticker();
 
     if (current_ticker) {
         base_url = $("base_ext").attr("url");
