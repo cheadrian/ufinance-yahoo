@@ -1,5 +1,10 @@
 # uFinance
 
+## Download
+You can get the extension from the [Chrome web store](https://chromewebstore.google.com/detail/ufinance/fmckmialbjidoghednjgbmigapfildng).
+
+## About
+
 Never miss a beat in the stock market, day or night! Enhance your Yahoo Finance experience with uFinance, featuring a sleek, dark theme and over 45 curated links tailored to each stock. 
 
 Now compatible with the new Yahoo Finance variant.
