@@ -57,7 +57,7 @@ const vue_app_load = function (ticker) {
                         { "id": 129, "type": "search", "name": "MorningStar", "category": "News", "icon": "morningstar.ico", "url": `https://www.morningstar.com/search?query=${ticker}` },
                         { "id": 132, "type": "search", "name": "TheStreet", "category": "News", "icon": "thestreet.png", "url": `https://www.thestreet.com/quote/${ticker}` },
                         { "id": 133, "type": "search", "name": "WSJ", "category": "News", "icon": "wsj.ico", "url": `https://www.wsj.com/market-data/quotes/${ticker}` },
-                        { "id": 109, "type": "search", "name": "SEC", "category": "Regulatory", "icon": "sec.ico", "url": `https://www.sec.gov/cgi-bin/browse-edgar?CIK=${ticker}` },
+                        { "id": 109, "type": "search", "name": "SEC", "category": "Regulatory", "icon": "sec.ico", "url": `https://www.sec.gov/edgar/search/#/q=${ticker}` },
                         { "id": 135, "type": "search", "name": "Reddit", "category": "Social Media", "icon": "reddit.png", "url": `https://www.reddit.com/search/?q=${ticker}` },
                         { "id": 104, "type": "search", "name": "WSB Search", "category": "Social Media", "icon": "reddit.png", "url": `https://www.reddit.com/r/wallstreetbets/search?q=${ticker}&restrict_sr=1` },
                         { "id": 108, "type": "search", "name": "X", "category": "Social Media", "icon": "x.svg", "url": `https://x.com/search?q=%24${ticker}` },
@@ -86,6 +86,8 @@ const vue_app_load = function (ticker) {
                         { "id": 137, "type": "shortcut", "name": "ChatGPT", "category": "A.I. LLMs", "icon": "chatgpt.png", "url": `https://chat.openai.com/` },
                         { "id": 138, "type": "shortcut", "name": "Gemini", "category": "A.I. LLMs", "icon": "gemini.svg", "url": `https://bard.google.com/chat` },
                         { "id": 140, "type": "shortcut", "name": "Claude", "category": "A.I. LLMs", "icon": "claude.ico", "url": `https://claude.ai/` },
+                        { "id": 141, "type": "shortcut", "name": "Back to classic Y Finance", "category": "Tools", "icon": "back-icon.svg", "url": `https://finance.yahoo.com/go-back?.done=%2F` },
+
                     ]
                 }
             },
@@ -522,27 +524,29 @@ window.addEventListener('load', function () {
         }
     });
     append_functions();
-});
-
-$(document).on("click", "#show-hide-ufinance", function () {
-    if ($("#ufinance_app").hasClass("slide-right-animate")) {
-        $("#ufinance_app").animate({ width: "250" }, 200, function () {
-            $("#ufinance_app").removeClass("slide-right-animate");
-            $("#ufinance_app").css("width", "");
-            localStorage.setItem("ufinanceAppHidden", "false");
-        });
-    } else {
-        $("#ufinance_app").addClass("slide-right-animate");
-        $("#ufinance_app").animate({ width: "0" }, 200);
-        localStorage.setItem("ufinanceAppHidden", "true");
-    }
-});
-
-$(document).ready(function () {
-    if (localStorage.getItem("ufinanceAppHidden") == "true") {
-        $("#ufinance_app").addClass("slide-right-animate");
-        $("#ufinance_app").css("width", "0");
-    }
+    // Hide uFinance App on click
+    $(document).on("click", "#show-hide-ufinance", function () {
+        if ($("#ufinance_app").hasClass("slide-right-animate")) {
+            $("#ufinance_app").animate({ width: "250" }, 200, function () {
+                $("#ufinance_app").removeClass("slide-right-animate");
+                $("#ufinance_app").css("width", "");
+                localStorage.setItem("ufinanceAppHidden", "false");
+            });
+        } else {
+            $("#ufinance_app").addClass("slide-right-animate");
+            $("#ufinance_app").animate({ width: "0" }, 200);
+            localStorage.setItem("ufinanceAppHidden", "true");
+        }
+    })
+    // Hide uFinance App on load
+    $(document).ready(function () {
+        if (localStorage.getItem("ufinanceAppHidden") == "true") {
+            setTimeout(function () {
+                $("#ufinance_app").addClass("slide-right-animate");
+                $("#ufinance_app").animate({ width: "0" }, 200);
+            }, 3000);
+        }
+    })
 });
 
 document.addEventListener('orReceiveDataEvent', function (e) {

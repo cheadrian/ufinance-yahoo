@@ -6,7 +6,7 @@ You can get the extension from the [Chrome web store](https://chromewebstore.goo
 
 ## About
 
-Never miss a beat in the stock market, day or night! Enhance your Yahoo Finance experience with uFinance, featuring a sleek, dark theme and over 45 curated links tailored to each stock. 
+Never miss a beat in the stock market, day or night! Enhance your Yahoo Finance experience with uFinance, featuring a sleek, dark theme and over 45 curated links tailored to each stock.
 
 Now compatible with the new Yahoo Finance variant.
 
@@ -22,7 +22,7 @@ Accelerate the build of your data relevancy with sidebar shortcuts, seamlessly g
 Engage in dynamic conversations with our advanced Artificial Intelligence using compatible with  over 50 language model options, all seamlessly integrated within the extension. Gain valuable insights, ask questions, and delve deeper into stock-related queries with the power of A.I. chat. Elevate your interactive experience and stay informed like never before!
 
 📝 Notes
-Effortlessly capture your insights and reflections on the ticker using the notes box conveniently located on the page. Quickly create the perfect reference point for your thoughts and stay organized. 
+Effortlessly capture your insights and reflections on the ticker using the notes box conveniently located on the page. Quickly create the perfect reference point for your thoughts and stay organized.
 
 🐤 StockTwits integration
 Access live ticker data in the integrated StockTwits box. Stay informed with real-time discussions, trends, and sentiments right within uFinance.

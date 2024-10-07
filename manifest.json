@@ -1,9 +1,9 @@
 {
   "update_url": "https://clients2.google.com/service/update2/crx",
-  "name": "uFinance: Yahoo Finance Upgraded",
-  "version": "1.2.0",
+  "name": "uFinance: Upgraded Y Finance Experience",
+  "version": "1.2.1",
   "manifest_version": 3,
-  "description": "Supercharge your Y!Finance to the dark side.",
+  "description": "Supercharge your Y Finance with dark mode, A.I. and shortcuts.",
   "externally_connectable": {
     "matches": [
       "https://finance.yahoo.com/*"

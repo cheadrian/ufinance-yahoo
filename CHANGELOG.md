@@ -1,3 +1,8 @@
+# V 1.2.1
+- Fix dark mode on new interface
+- Fix hidden uFinance app at load
+- Rename extension because of the trademark issue
+
 # V 1.2.0
 
 - Ask for review

@@ -1026,7 +1026,6 @@ li.Bgc\(\$pillBgBlue\) {
     --finc-positive: #06ad6a !important;
     --positive: #06ad6a !important;
     --yb-white: #353535 !important;
-    --surface3: #353535 !important;
     --yb-batcave: #dbdbdb !important;
     --enabled-active-brand-light: #01b192 !important;
     --hovered-brand-same-light: #06ab8e !important;
@@ -1039,7 +1038,15 @@ li.Bgc\(\$pillBgBlue\) {
     --surface2-light: #313131 !important;
     --surface3-light: #4a4a4a !important;
     --surface4-light: #3c3c3c !important;
+    --surface5-light: #3c3c3c !important;
+    --surface1: #454545 !important;
+    --surface2: #313131 !important;
+    --surface2a: #313131 !important;
+    --surface2b: #313131 !important;
+    --surface3: #353535 !important;
+    --surface4: #3c3c3c !important;
     --surface5: #3c3c3c !important;
+    --table-hover-emph: #525252 !important;
     --table-hover-emph-light: #525252 !important;
     --light-divider-light: #6a6a6a !important;
     --text-color: rgb(180 180 180) !important;
@@ -1047,10 +1054,18 @@ li.Bgc\(\$pillBgBlue\) {
     --text1-light: #e7e7e7 !important;
     --text2-light: #aaaaaa !important;
     --text3-light: #7c7c7c !important;
+    --text0: #ffffff !important;
+    --text1: #e7e7e7 !important;
+    --text2: #aaaaaa !important;
+    --text3: #7c7c7c !important;
+    --text4: #7c7c7c !important;
     --hover1: #3b3b3b !important;
     --hover2: #434343 !important;
     --hover3: #383838 !important;
+    --hover4: #383838 !important;
     --white: #282828 !important;
+    --primary: #9e9e9e !important;
+    --secondary: #a8a8a8 !important;
     --yb-l2-background: #282828 !important;
     --pressed-bg-neutral-light: #f0f3f5 !important;
     --enabled-active-emph-light: #91bdf9 !important;
@@ -1071,6 +1086,8 @@ li.Bgc\(\$pillBgBlue\) {
     --yb-marshmallow: #696969 !important;
     --positive-bg-light: #004a2c !important;
     --negative-bg-light: #420101 !important;
+    --positive-bg: #004a2c !important;
+    --negative-bg: #420101 !important;
 }
 
 .H\(\$chartGutterResponsive\) {
@@ -1269,7 +1286,7 @@ svg.svelte-7mltoh {
     position: relative;
     left: 0px;
     z-index: 9;
-    margin-top: -15px;
+    margin-top: 10px;
     /*border: 1px solid #676767;*/
 }
 
@@ -1343,4 +1360,8 @@ body#atomic #ufinance_app {
     border-radius: 4px;
     padding: 6px 8px;
     cursor: pointer;
+}
+
+.ybar-ytheme-crunch.ybar-property-finance ._yb_1eqqlf0{
+
 }
