@@ -3,6 +3,7 @@
 - Drop collection of the proposes through the Firebase firestore
 - Fix openrouter API checking
 - Drop StockTwits widget support
+- Add Stock Analysis and trim the link list
 
 # V 1.2.1
 - Fix dark mode on new interface

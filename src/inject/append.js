@@ -82,12 +82,11 @@ const vue_app_load = function (ticker) {
                         { "id": 134, "type": "search", "name": "Zacks", "category": "Analysis Tools", "icon": "zacks.ico", "url": `https://www.zacks.com/stock/quote/${ticker}` },
                         { "id": 139, "type": "search", "name": "Decode Investing", "category": "Analysis Tools", "icon": "decode_inv.png", "url": `https://decodeinvesting.com/ticker/${ticker}` },
                         { "id": 141, "type": "search", "name": "Tradestie", "category": "Analysis Tools", "icon": "tradestie.png", "url": `https://tradestie.com/apps/stockmarket/${ticker}-analysis/` },
+                        { "id": 142, "type": "search", "name": "StockAnalysis", "category": "Analysis Tools", "icon": "stockanalysis.webp", "url": `https://stockanalysis.com/stocks/${ticker}` },
                         { "id": 136, "type": "search", "name": "Copilot", "category": "A.I. LLMs", "icon": "copilot.ico", "url": `https://www.bing.com/search?showconv=1&sendquery=1&seltone=c&q=tell me about the stock with ticker: ${ticker}` },
                         { "id": 137, "type": "shortcut", "name": "ChatGPT", "category": "A.I. LLMs", "icon": "chatgpt.png", "url": `https://chat.openai.com/` },
                         { "id": 138, "type": "shortcut", "name": "Gemini", "category": "A.I. LLMs", "icon": "gemini.svg", "url": `https://bard.google.com/chat` },
                         { "id": 140, "type": "shortcut", "name": "Claude", "category": "A.I. LLMs", "icon": "claude.ico", "url": `https://claude.ai/` },
-                        { "id": 141, "type": "shortcut", "name": "Back to classic Y Finance", "category": "Tools", "icon": "back-icon.svg", "url": `https://finance.yahoo.com/go-back?.done=%2F` },
-
                     ]
                 }
             },
