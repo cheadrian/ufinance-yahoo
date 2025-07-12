@@ -152,7 +152,6 @@ const vue_app_load = function (ticker) {
                 }
             },
             appendUrlToList(name, link, attach_ticker = false) {
-                add_database_url(name, link, attach_ticker);
                 this.appendWebsite(name, link, attach_ticker);
                 //Show alert about appended URL and time to show alert
                 this.count_alert_append_url = 5;

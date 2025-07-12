@@ -44,7 +44,6 @@
         "js/jquery/jquery.js",
         "js/stocktwits/*",
         "js/vue/*",
-        "js/firebase/*",
         "fonts/*"
       ],
       "matches": [

@@ -169,7 +169,6 @@
             <p class="font-weight-light text-white-50"><small>Append ticker at the end of the URL.</small></p>
         </b-form>
 
-        <p class="font-weight-light font-italic text-white-50"><small>Please note the URL will also send anonymously to a database in order to integrate in the standard list of future updates.</small></p>
     </b-modal>
 
     <b-modal 
