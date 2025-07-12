@@ -2,6 +2,7 @@
 - Drop support for the uFinance dark mode in favor of the standard one
 - Drop collection of the proposes through the Firebase firestore
 - Fix openrouter API checking
+- Drop StockTwits widget support
 
 # V 1.2.1
 - Fix dark mode on new interface

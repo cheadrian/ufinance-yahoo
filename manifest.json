@@ -42,7 +42,6 @@
         "src/favicons/*",
         "src/bootstrap/js/*",
         "js/jquery/jquery.js",
-        "js/stocktwits/*",
         "js/vue/*",
         "fonts/*"
       ],

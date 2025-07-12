@@ -371,36 +371,6 @@ const capitalize_first_letter = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const insert_stocktwits = function (ticker) {
-    $('#stocktwits-widget-news').empty();
-    const pluginConfig = {
-        container: 'stocktwits-widget-news',
-        symbol: ticker,
-        width: $('#ufinance_app').width(),
-        height: '600',
-        limit: '70',
-        scrollbars: 'true',
-        streaming: 'true',
-        avatars: 0,
-        title: ticker + ' Ideas',
-        style: {
-            link_color: '#4f8ce8',
-            link_hover_color: '#4f8ce8',
-            header_text_color: 'white',
-            border_color: 'black',
-            divider_color: '#929292',
-            divider_color: '#929292',
-            divider_type: 'solid',
-            box_color: '#212529',
-            stream_color: '#212529',
-            text_color: 'white',
-            time_color: '999999',
-            username_color: '#4f8ce8',
-        }
-    }
-    STWT.Widget(pluginConfig);
-}
-
 const get_ticker = function () {
     const regexTicker = /(?<=\/quote\/)(.[\^\=A-Z]+)/g;
     decodedPath = decodeURIComponent(window.location.pathname);
@@ -443,13 +413,11 @@ const check_commodity = function (current_ticker) {
 
 const hide_all_app = function () {
     $("#stock_notes").hide();
-    $("#stocktwits-widget-news").hide();
     $("#ufinance_app").hide();
 }
 
 const show_all_app = function () {
     $("#stock_notes").show();
-    $("#stocktwits-widget-news").show();
     $("#ufinance_app").show();
 }
 
@@ -457,12 +425,6 @@ const update_functions = function () {
     const current_ticker = get_ticker();
 
     if (current_ticker) {
-        if (!check_commodity(current_ticker)) {
-            insert_stocktwits(current_ticker);
-            $("#st_car").show();
-        } else {
-            $("#st_car").hide();
-        }
         vue_app.updateAppData(current_ticker);
         show_all_app();
     } else {
@@ -485,16 +447,10 @@ const append_functions = function () {
                 const top_ad_height = $("#svelte .ad .tw-sticky.tw-top-0").height();
                 const under_header_offset = top_ad_height + 130;
                 $("#ufinance_app").css('top', under_header_offset);
-                $("#st_car").hide();
             }
             vue_app_load(current_ticker);
             if ($("#render-target-default").length) {
-                if (!check_commodity(current_ticker)) {
-                    insert_stocktwits(current_ticker);
-                    $("#st_car").show();
-                } else {
-                    $("#st_car").hide();
-                }
+                // ...
             }
         });
     }

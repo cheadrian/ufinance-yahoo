@@ -96,21 +96,6 @@
             </div>
         </div>
     </b-card>
-    
-    <b-card id="st_car" :header="current_ticker">
-        <template #header>
-            <div class="header_one">
-                <div class="header_two">Stocktwits {{ current_ticker }}</div>
-                <div class="header_three">
-                    <i v-on:click="toggleCardHidden('twits')" class="fas fa-window-minimize header_icon"></i>
-                </div>
-            </div>
-        </template>
-        <div v-show="!hiddenCards['twits']" class="inner-twits">
-            <div id="stocktwits-widget-news"></div>
-            <a href='https://stocktwits.com' style='display:none; font-size: 0px;'>Open in Stocktwits</a>
-        </div>
-    </b-card>
 
     <a href="https://chromewebstore.google.com/detail/ufinance/fmckmialbjidoghednjgbmigapfildng/reviews/my-review">
         <p target="__blank" class="font-weight-light text-white-50 text-center"><small>⭐ Give uFinance stars!</small></p>

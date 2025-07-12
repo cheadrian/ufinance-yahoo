@@ -38,5 +38,4 @@ injectStyle(chrome.runtime.getURL('src/bootstrap/css/bootstrap-vue.css'), 'head'
 injectScript(chrome.runtime.getURL('js/jquery/jquery.js'), 'head');
 injectScript(chrome.runtime.getURL('js/vue/vue.js'), 'head');
 injectScript(chrome.runtime.getURL('src/bootstrap/js/bootstrap-vue.js'), 'head');
-injectScript(chrome.runtime.getURL('js/stocktwits/stocktwits.js'), 'head');
 injectScript(chrome.runtime.getURL('src/inject/append.js'), 'body');
