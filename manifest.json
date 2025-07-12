@@ -1,7 +1,7 @@
 {
   "update_url": "https://clients2.google.com/service/update2/crx",
   "name": "uFinance: Upgraded Y Finance Experience",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "manifest_version": 3,
   "description": "Supercharge your Y Finance with dark mode, A.I. and shortcuts.",
   "externally_connectable": {

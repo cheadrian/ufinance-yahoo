@@ -1,6 +1,7 @@
 # V 1.2.2
 - Drop support for the uFinance dark mode in favor of the standard one
 - Drop collection of the proposes through the Firebase firestore
+- Fix openrouter API checking
 
 # V 1.2.1
 - Fix dark mode on new interface

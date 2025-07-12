@@ -416,20 +416,12 @@ const get_ticker = function () {
 const get_contextual_data = function () {
     let context_data = "";
     try {
-        if (document.getElementById("svelte")) {
-            const svelt_news_headlines = document.querySelector('*[data-testid="recent-news"]').textContent.trim();
-            const svelt_quote_stats = document.querySelector('*[data-testid="quote-statistics"]').textContent.trim();
-            const svelt_current_price = "Current price:" + document.querySelector('*[data-testid="qsp-price"]').textContent.trim();
-            const svelt_valuation_measure = document.querySelector('*[data-testid="valuation-measures"]').textContent.trim();
-            const svelt_financial_highlights = document.querySelector('*[data-testid="financial-highlights"]').textContent.trim();
-            context_data = svelt_news_headlines + "\n" + svelt_quote_stats + "\n" + svelt_current_price + "\n" + svelt_valuation_measure + "\n" + svelt_financial_highlights;
-        }
-        else if (document.getElementById("YDC-Lead")) {
-            const clasic_quote_summary = document.querySelector('#quote-summary').textContent.trim();
-            const clasic_news_data = document.querySelector('#quoteNewsStream-0-Stream').textContent.trim();
-            const classic_current_price = "Current price:" + document.querySelector('#quote-header-info *[data-field="regularMarketPrice"]').textContent.trim();
-            context_data = clasic_quote_summary + "\n" + clasic_news_data + "\n" + classic_current_price + "\n";
-        }
+        const svelt_news_headlines = document.querySelector('*[data-testid="recent-news"]').textContent.trim();
+        const svelt_quote_stats = document.querySelector('*[data-testid="quote-statistics"]').textContent.trim();
+        const svelt_current_price = "Current price:" + document.querySelector('*[data-testid="qsp-price"]').textContent.trim();
+        const svelt_valuation_measure = document.querySelector('*[data-testid="valuation-measures"]').textContent.trim();
+        const svelt_financial_highlights = document.querySelector('*[data-testid="financial-highlights"]').textContent.trim();
+        context_data = svelt_news_headlines + "\n" + svelt_quote_stats + "\n" + svelt_current_price + "\n" + svelt_valuation_measure + "\n" + svelt_financial_highlights;
     } catch (error) {
         console.log("Failed to detect contextual data:", error.message);
     }
@@ -554,7 +546,7 @@ document.addEventListener('orReceiveDataEvent', function (e) {
         vue_app.form_ai.settings_status = 'error_api_check';
         vue_app.form_ai.api_key_check = false;
     }
-    if (data.is_free_tier === true) {
+    if (typeof data.is_free_tier === 'boolean') {
         vue_app.form_ai.settings_status = 'success_api_check';
         vue_app.form_ai.api_key_check = true;
         //document.dispatchEvent(new CustomEvent('orSendDataEvent', { detail: { getOrModels: true } }));

@@ -1,6 +1,6 @@
 const openrouter_get_api_key_ls = function () {
     const apiKey = localStorage.getItem('orApiKey');
-    
+
     if (apiKey === null) {
         throw new Error('OpenRouter API key is null');
     }
@@ -18,7 +18,7 @@ const openrouter_check_api_key = async function (apiKey) {
 
         if (!response.ok) {
             console.log(`HTTP error while checking API key! Status: ${response.status}`);
-            return ;
+            return;
         }
 
         return await response.json();
@@ -48,16 +48,16 @@ const openrouter_get_models = async function (apiKey) {
     }
 }
 
-const openrouter_get_relevant_information = async function (ticker, messages= [], model = "", context = "") {
+const openrouter_get_relevant_information = async function (ticker, messages = [], model = "", context = "") {
     const apiKey = openrouter_get_api_key_ls();
     let msg_context = "";
     let condition = "Respond only in English; the first response should be under 50 words."
-    if(context.length == 0) {
+    if (context.length == 0) {
         msg_context = "No context provided, only general information about company and tiker.";
     } else {
         msg_context = `Relevant contextual data provided by stock platform for ${ticker}: \n` + context;
     }
-    if(model.length == 0) {
+    if (model.length == 0) {
         throw new Error('OpenRouter model is empty');
     }
     const msg_to_send = [
@@ -89,9 +89,9 @@ const openrouter_get_relevant_information = async function (ticker, messages= []
     }
 };
 
-const dispatch_models_to_website = async function(apiKey) {
+const dispatch_models_to_website = async function (apiKey) {
     const response = await openrouter_get_models(apiKey);
-    if(response) {
+    if (response) {
         document.dispatchEvent(new CustomEvent('orReceiveDataEvent', { detail: { orModels: response.data } }));
     } else {
         throw new Error('OpenRouter failed to list models');
@@ -100,22 +100,22 @@ const dispatch_models_to_website = async function(apiKey) {
 
 document.addEventListener('orSendDataEvent', async function (e) {
     const data = e.detail;
-    if(data.apiKeyCheck === true) {
+    if (data.apiKeyCheck === true) {
         const response = await openrouter_check_api_key(data.apiKey);
-        if(response) {
+        if (response) {
             document.dispatchEvent(new CustomEvent('orReceiveDataEvent', { detail: { is_free_tier: response.data.is_free_tier } }));
             dispatch_models_to_website(data.apiKey);
         } else {
             document.dispatchEvent(new CustomEvent('orReceiveDataEvent', { detail: { invalidApiKey: true } }));
-        }   
+        }
     }
-    if(data.getMessageFromAi === true){
+    if (data.getMessageFromAi === true) {
         const response = await openrouter_get_relevant_information(data.ticker, data.messages, data.model, data.context);
-        if(response) {
+        if (response) {
             document.dispatchEvent(new CustomEvent('orReceiveDataEvent', { detail: { orMessages: response.choices } }));
         } else {
             throw new Error('OpenRouter API generic conversation error.');
         }
     }
     //if(data.getOrModels === true){ }
-  });
+});
